@@ -1,0 +1,143 @@
+package main
+
+import (
+	"fmt"
+)
+
+// Struktur Data
+
+// Mahasiswa menyimpan informasi mahasiswa
+type Mahasiswa struct {
+	ID          int
+	Nama        string
+	TanggalLahir string
+	JurusanID   int
+	NilaiTes   float64
+	Status      string
+}
+
+// Jurusan menyimpan informasi jurusan
+type Jurusan struct {
+	ID   int
+	Nama string
+}
+
+// AplikasiPendaftaran menyimpan daftar mahasiswa dan jurusan
+type AplikasiPendaftaran struct {
+	Mahasiswas []Mahasiswa
+	Jurusans   []Jurusan
+}
+
+// Fungsi CRUD Mahasiswa
+
+// TambahMahasiswa menambah mahasiswa baru
+func (app *AplikasiPendaftaran) TambahMahasiswa(mahasiswa Mahasiswa) {
+	app.Mahasiswas = append(app.Mahasiswas, mahasiswa)
+}
+
+// EditMahasiswa mengedit data mahasiswa
+func (app *AplikasiPendaftaran) EditMahasiswa(id int, mahasiswa Mahasiswa) {
+	for i, m := range app.Mahasiswas {
+		if m.ID == id {
+			app.Mahasiswas[i] = mahasiswa
+			break
+		}
+	}
+}
+
+// HapusMahasiswa menghapus mahasiswa berdasarkan ID
+func (app *AplikasiPendaftaran) HapusMahasiswa(id int) {
+	for i, m := range app.Mahasiswas {
+		if m.ID == id {
+			app.Mahasiswas = append(app.Mahasiswas[:i], app.Mahasiswas[i+1:]...)
+			break
+		}
+	}
+}
+
+// Fungsi CRUD Jurusan
+
+// TambahJurusan menambah jurusan baru
+func (app *AplikasiPendaftaran) TambahJurusan(jurusan Jurusan) {
+	app.Jurusans = append(app.Jurusans, jurusan)
+}
+
+// EditJurusan mengedit data jurusan
+func (app *AplikasiPendaftaran) EditJurusan(id int, jurusan Jurusan) {
+	for i, j := range app.Jurusans {
+		if j.ID == id {
+			app.Jurusans[i] = jurusan
+			break
+		}
+	}
+}
+
+// HapusJurusan menghapus jurusan berdasarkan ID
+func (app *AplikasiPendaftaran) HapusJurusan(id int) {
+	for i, j := range app.Jurusans {
+		if j.ID == id {
+			app.Jurusans = append(app.Jurusans[:i], app.Jurusans[i+1:]...)
+			break
+		}
+	}
+}
+
+// Fungsi Query
+
+// TampilkanMahasiswaByJurusan menampilkan mahasiswa berdasarkan jurusan
+func (app *AplikasiPendaftaran) TampilkanMahasiswaByJurusan(jurusanID int) {
+	for _, m := range app.Mahasiswas {
+		if m.JurusanID == jurusanID {
+			fmt.Println(m)
+		}
+	}
+}
+
+// TampilkanMahasiswaByStatus menampilkan mahasiswa berdasarkan status pendaftaran
+func (app *AplikasiPendaftaran) TampilkanMahasiswaByStatus(status string) {
+	for _, m := range app.Mahasiswas {
+		if m.Status == status {
+			fmt.Println(m)
+		}
+	}
+}
+
+// TampilkanMahasiswaTerurut menampilkan mahasiswa terurut sesuai kriteria
+func (app *AplikasiPendaftaran) TampilkanMahasiswaTerurut() {
+	// Placeholder untuk implementasi pengurutan
+	fmt.Println("Fungsi pengurutan belum diimplementasikan.")
+}
+
+// Fungsi Tambahan
+
+// UbahNilaiTes mengubah nilai tes mahasiswa
+func (app *AplikasiPendaftaran) UbahNilaiTes(id int, nilaiBaru float64) {
+	for i, m := range app.Mahasiswas {
+		if m.ID == id {
+			app.Mahasiswas[i].NilaiTes = nilaiBaru
+			break
+		}
+	}
+}
+
+// Main Function
+
+func main() {
+	app := AplikasiPendaftaran{}
+
+	// Contoh penggunaan
+	jurusan1 := Jurusan{ID: 1, Nama: "Teknik Informatika"}
+	app.TambahJurusan(jurusan1)
+
+	mahasiswa1 := Mahasiswa{ID: 1, Nama: "Budi", TanggalLahir: "2000-01-01", JurusanID: 1, NilaiTes: 85.5, Status: "Diterima"}
+	app.TambahMahasiswa(mahasiswa1)
+
+	// Menampilkan mahasiswa berdasarkan jurusan
+	fmt.Println("Mahasiswa di Jurusan Teknik Informatika:")
+	app.TampilkanMahasiswaByJurusan(1)
+
+	// Mengubah nilai tes mahasiswa
+	app.UbahNilaiTes(1, 90.0)
+	fmt.Println("Setelah mengubah nilai tes:")
+	fmt.Println(app.Mahasiswas[0])
+}
